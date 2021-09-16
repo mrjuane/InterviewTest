@@ -1,0 +1,370 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="InventoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="CreatedTimestamp" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CategoryAttributes">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="InstanceId" Type="int" Nullable="false" />
+          <Property Name="Key" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CategoryCategories">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="CategoryInstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="int" Nullable="false" />
+          <Property Name="CategoryInstanceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductAttributes">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="InstanceId" Type="int" Nullable="false" />
+          <Property Name="Key" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Value" Type="varchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductCategories">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="CategoryInstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="int" Nullable="false" />
+          <Property Name="CategoryInstanceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="ProductImageUris" Type="varchar(max)" Nullable="false" />
+          <Property Name="ValidSkus" Type="varchar(max)" Nullable="false" />
+          <Property Name="CreatedTimestamp" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CategoryAttributes_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CategoryAttributes" Type="Self.CategoryAttributes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="CategoryAttributes">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryCategories_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CategoryCategories" Type="Self.CategoryCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="CategoryCategories">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CategoryCategories_Categories_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="CategoryCategories" Type="Self.CategoryCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="CategoryCategories">
+              <PropertyRef Name="CategoryInstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAttributes_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductAttributes" Type="Self.ProductAttributes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="ProductAttributes">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCategories_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductCategories" Type="Self.ProductCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="ProductCategories">
+              <PropertyRef Name="CategoryInstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCategories_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductCategories" Type="Self.ProductCategories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="ProductCategories">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="InventoryModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="Instances" store:Type="Tables" />
+          <EntitySet Name="CategoryAttributes" EntityType="Self.CategoryAttributes" Schema="Instances" store:Type="Tables" />
+          <EntitySet Name="CategoryCategories" EntityType="Self.CategoryCategories" Schema="Instances" store:Type="Tables" />
+          <EntitySet Name="ProductAttributes" EntityType="Self.ProductAttributes" Schema="Instances" store:Type="Tables" />
+          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategories" Schema="Instances" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="Instances" store:Type="Tables" />
+          <AssociationSet Name="FK_CategoryAttributes_Categories" Association="Self.FK_CategoryAttributes_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CategoryAttributes" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryCategories_Categories" Association="Self.FK_CategoryCategories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CategoryCategories" EntitySet="CategoryCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CategoryCategories_Categories_Categories" Association="Self.FK_CategoryCategories_Categories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CategoryCategories" EntitySet="CategoryCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAttributes_Products" Association="Self.FK_ProductAttributes_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductAttributes" EntitySet="ProductAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCategories_Categories" Association="Self.FK_ProductCategories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="ProductCategories" EntitySet="ProductCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCategories_Products" Association="Self.FK_ProductCategories_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductCategories" EntitySet="ProductCategories" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="InventoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedTimestamp" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="CategoryAttributes" Relationship="Self.FK_CategoryAttributes_Categories" FromRole="Categories" ToRole="CategoryAttributes" />
+          <NavigationProperty Name="Categories1" Relationship="Self.CategoryCategories" FromRole="Categories" ToRole="Categories1" />
+          <NavigationProperty Name="Categories" Relationship="Self.CategoryCategories" FromRole="Categories1" ToRole="Categories" />
+          <NavigationProperty Name="Products" Relationship="Self.ProductCategories" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="CategoryAttribute">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="InstanceId" Type="Int32" Nullable="false" />
+          <Property Name="Key" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="512" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_CategoryAttributes_Categories" FromRole="CategoryAttributes" ToRole="Categories" />
+        </EntityType>
+        <EntityType Name="ProductAttribute">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+            <PropertyRef Name="Key" />
+          </Key>
+          <Property Name="InstanceId" Type="Int32" Nullable="false" />
+          <Property Name="Key" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Value" Type="String" MaxLength="512" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_ProductAttributes_Products" FromRole="ProductAttributes" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="InstanceId" />
+          </Key>
+          <Property Name="InstanceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductImageUris" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ValidSkus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreatedTimestamp" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="ProductAttributes" Relationship="Self.FK_ProductAttributes_Products" FromRole="Products" ToRole="ProductAttributes" />
+          <NavigationProperty Name="Categories" Relationship="Self.ProductCategories" FromRole="Products" ToRole="Categories" />
+        </EntityType>
+        <Association Name="FK_CategoryAttributes_Categories">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CategoryAttributes" Type="Self.CategoryAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="CategoryAttributes">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductAttributes_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ProductAttributes" Type="Self.ProductAttribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="InstanceId" />
+            </Principal>
+            <Dependent Role="ProductAttributes">
+              <PropertyRef Name="InstanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CategoryCategories">
+          <End Role="Categories" Type="Self.Category" Multiplicity="*" />
+          <End Role="Categories1" Type="Self.Category" Multiplicity="*" />
+        </Association>
+        <Association Name="ProductCategories">
+          <End Role="Categories" Type="Self.Category" Multiplicity="*" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="InventoryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="CategoryAttributes" EntityType="Self.CategoryAttribute" />
+          <EntitySet Name="ProductAttributes" EntityType="Self.ProductAttribute" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <AssociationSet Name="FK_CategoryAttributes_Categories" Association="Self.FK_CategoryAttributes_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="CategoryAttributes" EntitySet="CategoryAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductAttributes_Products" Association="Self.FK_ProductAttributes_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="ProductAttributes" EntitySet="ProductAttributes" />
+          </AssociationSet>
+          <AssociationSet Name="CategoryCategories" Association="Self.CategoryCategories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="ProductCategories" Association="Self.ProductCategories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="InventoryModelStoreContainer" CdmEntityContainer="InventoryEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="InventoryModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedTimestamp" ColumnName="CreatedTimestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryAttributes">
+            <EntityTypeMapping TypeName="InventoryModel.CategoryAttribute">
+              <MappingFragment StoreEntitySet="CategoryAttributes">
+                <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductAttributes">
+            <EntityTypeMapping TypeName="InventoryModel.ProductAttribute">
+              <MappingFragment StoreEntitySet="ProductAttributes">
+                <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="InventoryModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ProductImageUris" ColumnName="ProductImageUris" />
+                <ScalarProperty Name="ValidSkus" ColumnName="ValidSkus" />
+                <ScalarProperty Name="CreatedTimestamp" ColumnName="CreatedTimestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="CategoryCategories" TypeName="InventoryModel.CategoryCategories" StoreEntitySet="CategoryCategories">
+            <EndProperty Name="Categories">
+              <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+            </EndProperty>
+            <EndProperty Name="Categories1">
+              <ScalarProperty Name="InstanceId" ColumnName="CategoryInstanceId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ProductCategories" TypeName="InventoryModel.ProductCategories" StoreEntitySet="ProductCategories">
+            <EndProperty Name="Categories">
+              <ScalarProperty Name="InstanceId" ColumnName="CategoryInstanceId" />
+            </EndProperty>
+            <EndProperty Name="Products">
+              <ScalarProperty Name="InstanceId" ColumnName="InstanceId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,63 @@
+﻿@model InventoryWebApp.Models.Product
+
+
+@{
+    ViewBag.Title = "InsertUpdate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="form">
+
+    <br />
+    <br />
+
+    @using (Html.BeginForm())
+    {
+    <div class="form">
+        @Html.HiddenFor(m => m.InstanceId)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.EditorFor(m => m.Name)
+            @Html.ValidationMessageFor(m => m.Name)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.EditorFor(m => m.Description)
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ProductImageUris)
+            @Html.EditorFor(m => m.ProductImageUris)
+            @Html.ValidationMessageFor(m => m.ProductImageUris)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ValidSkus)
+            @Html.EditorFor(m => m.ValidSkus)
+            @Html.ValidationMessageFor(m => m.ValidSkus)
+        </div>
+       
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="reset" value="Cancel" class="btn btn-default cancel" />
+        </div>
+    </div>
+
+    }
+
+</div>
+
+@section scripts{
+    
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        const control = document.querySelector('.cancel');
+
+        control.addEventListener('click', () => {
+            window.location.replace('@Url.Action("Index")');
+        })
+    </script>
+
+
+}
